@@ -76,7 +76,7 @@ endif
 endif
 
 ## Ensures NPM dependencies are installed without having to run this all the time.
-webapp/node_modules: webapp/package.json
+webapp/node_modules:
 ifneq ($(HAS_WEBAPP),)
 	cd webapp && $(NPM) install
 	touch $@

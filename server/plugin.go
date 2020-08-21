@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+	"strings"
 	"sync"
 
 	"github.com/mattermost/mattermost-server/v5/plugin"
@@ -18,11 +18,24 @@ type Plugin struct {
 	// configuration is the active plugin configuration. Consult getConfiguration and
 	// setConfiguration for usage.
 	configuration *configuration
+
+	botUserID string
 }
 
-// ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
+// ServeHTTP allows the plugin to implement the http.Handler interface. Requests destined for the
+// /plugins/{id} path will be routed to the plugin.
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello, world!")
-}
+	token := r.URL.Query().Get("token")
+	if token == "" || strings.Compare(token, p.configuration.Token) != 0 {
+		errorMessage := "Invalid or missing token"
+		http.Error(w, errorMessage, http.StatusBadRequest)
+		return
+	}
 
-// See https://developers.mattermost.com/extend/plugins/server/reference/
+	switch r.URL.Path {
+	case "/api/dialog":
+		p.handleDialog(w, r)
+	default:
+		http.NotFound(w, r)
+	}
+}

@@ -25,13 +25,19 @@ const manifestStr = `
     },
     "executable": ""
   },
-  "webapp": {
-    "bundle_path": "webapp/dist/main.js"
-  },
   "settings_schema": {
     "header": "",
     "footer": "",
-    "settings": []
+    "settings": [
+      {
+        "key": "Token",
+        "display_name": "Token:",
+        "type": "generated",
+        "help_text": "The token used validate the requests.",
+        "placeholder": "",
+        "default": null
+      }
+    ]
   }
 }
 `
