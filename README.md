@@ -8,6 +8,15 @@ Use cases:
 - Notify the user when will have some maintanance in the Mattermost instance.
 - Communicate an important message to all users.
 
+## Installation
+
+Upload your plugin and then go to the plugin settings to generate the internal Token.
+
+## Usage
+
+To use the plugin, only users with the role of `system administrators` can use that, for other users the command will be blocked.
+
+You can use by typing `/broadcast-message <YOUR MESSAGE>` or just `/broadcast-message`, if you post the second it will open an dialog to you fill the message.
 
 ## Development
 
