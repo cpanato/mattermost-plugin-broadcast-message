@@ -49,7 +49,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 		return &model.CommandResponse{}, uErr
 	}
 	if strings.Trim(args.Command, " ") == broadcast {
-		p.InteractiveSchedule(args.TriggerId, user)
+		p.InteractiveBroadcast(args.TriggerId, user)
 		return &model.CommandResponse{}, nil
 	}
 
@@ -130,12 +130,11 @@ func (p *Plugin) broadcastMessage(teamID, channelID, userID, message string) err
 	return nil
 }
 
-func (p *Plugin) InteractiveSchedule(triggerID string, user *model.User) {
+func (p *Plugin) InteractiveBroadcast(triggerID string, user *model.User) {
 	config := p.API.GetConfig()
-	siteURLPort := *config.ServiceSettings.ListenAddress
 	dialogRequest := model.OpenDialogRequest{
 		TriggerId: triggerID,
-		URL:       fmt.Sprintf("http://localhost%v/plugins/%v/api/dialog?token=%s", siteURLPort, manifest.Id, p.configuration.Token),
+		URL:       fmt.Sprintf("%s/plugins/%s/api/dialog?token=%s", *config.ServiceSettings.SiteURL, manifest.Id, p.configuration.Token),
 		Dialog: model.Dialog{
 			Title:       "Broadcast an important message",
 			CallbackId:  model.NewId(),
